@@ -27,8 +27,8 @@ const Index = () => {
             </h1>
             
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Protecting your digital world with cutting-edge AI technology. Detect phishing URLs, 
-              analyze threats, and stay secure with real-time analysis.
+              Enterprise-grade security platform built to protect your digital assets. Our advanced 
+              machine learning models detect phishing URLs and analyze threats in real-time.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
@@ -38,9 +38,6 @@ const Index = () => {
                   <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
-              <Button size="lg" variant="outline" className="gap-2">
-                Learn More
-              </Button>
             </div>
           </div>
         </div>
@@ -66,7 +63,7 @@ const Index = () => {
                 </div>
                 <CardTitle>Phishing URL Detection</CardTitle>
                 <CardDescription>
-                  AI-powered lexical analysis to identify malicious URLs in real-time
+                  Advanced machine learning algorithms analyze URL patterns to identify potential threats
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -155,7 +152,7 @@ const Index = () => {
                 Ready to Secure Your Digital World?
               </CardTitle>
               <CardDescription className="text-primary-foreground/80 text-lg">
-                Start detecting threats with our AI-powered phishing URL detector
+                Start protecting your organization with our phishing URL detection system
               </CardDescription>
             </CardHeader>
             <CardContent className="text-center">

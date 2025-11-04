@@ -76,7 +76,7 @@ const PhishingDetector = () => {
           <div className="text-center mb-12 space-y-4">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20">
               <Shield className="w-4 h-4 text-primary" />
-              <span className="text-sm font-medium text-primary">AI-Powered Analysis</span>
+              <span className="text-sm font-medium text-primary">Machine Learning Analysis</span>
             </div>
             
             <h1 className="text-4xl md:text-5xl font-bold">
@@ -86,7 +86,7 @@ const PhishingDetector = () => {
             </h1>
             
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Advanced lexical analysis using machine learning to detect malicious URLs
+              Enterprise-grade lexical analysis powered by Random Forest and SVM classification models
             </p>
           </div>
 
@@ -236,7 +236,7 @@ const PhishingDetector = () => {
               <CardHeader>
                 <CardTitle>How It Works</CardTitle>
                 <CardDescription>
-                  Our MVP uses lexical feature analysis to detect phishing URLs
+                  Our system analyzes multiple lexical features to identify phishing attempts
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4 text-sm text-muted-foreground">
@@ -257,8 +257,8 @@ const PhishingDetector = () => {
                 <div className="flex gap-3">
                   <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-medium text-foreground">AI-Powered Classification</p>
-                    <p>Uses machine learning to provide instant threat assessment</p>
+                    <p className="font-medium text-foreground">ML Classification</p>
+                    <p>Trained classification models deliver accurate, instant threat assessments</p>
                   </div>
                 </div>
               </CardContent>
