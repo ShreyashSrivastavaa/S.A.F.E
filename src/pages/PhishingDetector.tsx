@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Shield, AlertTriangle, CheckCircle, Loader2, Link as LinkIcon } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Shield, AlertTriangle, CheckCircle, Loader2, Link as LinkIcon, Clock, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -21,11 +21,46 @@ interface AnalysisResult {
   explanation: string;
 }
 
+interface HistoryItem extends AnalysisResult {
+  url: string;
+  timestamp: number;
+}
+
 const PhishingDetector = () => {
   const [url, setUrl] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [result, setResult] = useState<AnalysisResult | null>(null);
+  const [history, setHistory] = useState<HistoryItem[]>([]);
   const { toast } = useToast();
+
+  // Load history from localStorage on mount
+  useEffect(() => {
+    const savedHistory = localStorage.getItem("phishing-scan-history");
+    if (savedHistory) {
+      setHistory(JSON.parse(savedHistory));
+    }
+  }, []);
+
+  // Save to history
+  const saveToHistory = (scanResult: AnalysisResult, scannedUrl: string) => {
+    const newItem: HistoryItem = {
+      ...scanResult,
+      url: scannedUrl,
+      timestamp: Date.now(),
+    };
+    const updatedHistory = [newItem, ...history].slice(0, 10); // Keep last 10
+    setHistory(updatedHistory);
+    localStorage.setItem("phishing-scan-history", JSON.stringify(updatedHistory));
+  };
+
+  const clearHistory = () => {
+    setHistory([]);
+    localStorage.removeItem("phishing-scan-history");
+    toast({
+      title: "History Cleared",
+      description: "All scan history has been removed",
+    });
+  };
 
   const analyzeUrl = async () => {
     if (!url.trim()) {
@@ -48,6 +83,7 @@ const PhishingDetector = () => {
       if (error) throw error;
 
       setResult(data);
+      saveToHistory(data, url);
       
       toast({
         title: "Analysis Complete",
@@ -133,9 +169,61 @@ const PhishingDetector = () => {
             </CardContent>
           </Card>
 
+          {/* Recent Scans History */}
+          {history.length > 0 && !result && (
+            <Card className="shadow-card">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle className="flex items-center gap-2">
+                      <Clock className="w-5 h-5" />
+                      Recent Scans
+                    </CardTitle>
+                    <CardDescription>Your latest URL analysis results</CardDescription>
+                  </div>
+                  <Button variant="ghost" size="sm" onClick={clearHistory} className="gap-2">
+                    <Trash2 className="w-4 h-4" />
+                    Clear
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  {history.map((item, idx) => (
+                    <div
+                      key={idx}
+                      className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors cursor-pointer"
+                      onClick={() => {
+                        setUrl(item.url);
+                        setResult(item);
+                      }}
+                    >
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium truncate">{item.url}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {new Date(item.timestamp).toLocaleString()}
+                        </p>
+                      </div>
+                      <Badge variant={item.verdict === "safe" ? "default" : "destructive"}>
+                        {item.verdict === "safe" ? "Safe" : "Scam"}
+                      </Badge>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
           {/* Results Section */}
           {result && (
             <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4">
+              <Button 
+                variant="ghost" 
+                onClick={() => setResult(null)}
+                className="gap-2"
+              >
+                ← New Scan
+              </Button>
               {/* Verdict Card */}
               <Card className={`shadow-card border-2 ${
                 result.verdict === "safe" 
